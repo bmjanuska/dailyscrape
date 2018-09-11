@@ -149,7 +149,42 @@ app.get("/notes/:id", function(req, res){
 //remove saved article
   //Make the saved article a true or false. Saved is true! False will not have item in the bank of saved.
 
-
+//update saved data
+  app.get("/saved", function(req, res){
+    db.Article.update(
+      {
+        _id: mongojs.ObjectId(req.params.id)
+      },
+      {
+        // Set the title, note and modified parameters
+        // sent in the req body.
+        $set: {
+          saved: true
+        }
+      },
+      function(error, edited) {
+        // Log any errors from mongojs
+        if (error) {
+          console.log(error);
+          res.send(error);
+        }
+        else {
+          // Otherwise, send the mongojs response to the browser
+          // This will fire off the success function of the ajax request
+          console.log(edited);
+          res.send(edited);
+        }
+      }
+    );
+    // db.Article.update({article: req.params.id})
+    // .then(function(dbArticle){
+    //   return db.Article.Update({ _id: req.params.id }, { saved: true });
+    //   res.json(dbArticle);
+    // })
+    // .catch(function(err){
+    //   res.json(err);
+    // });
+  });
 
 // Start the server
 app.listen(PORT, function() {

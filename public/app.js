@@ -6,8 +6,9 @@ $.getJSON("/articles", function(data) {
     // Display the apropos information on the page
     $("#articles").append("<p>" + data[i].title + "<br />" + data[i].date + "</p>");
     //Need to make a save article button
-    $("#articles").append("<button class='addNote' data-id='" + data[i]._id + "'>" + "Make A Note" + "</button>");
-    //TODO
+    $("#articles").append("<a class='btn btn-primary addNote' data-id='" + data[i]._id + "'>" + "Make A Note" + "</a>");
+
+    $("#articles").append("<a class='btn btn-primary saveArticle' data-id='" + data[i]._id + "'>" + "Save Article" + "</a>");
     //Create another button to save the article. dataid or something to then get it to show in a saved page
     //will have to handle in backend to true/ false so it moves
     // not here... when saved articles then need a route that will get the saved articles db.saved /
@@ -94,14 +95,25 @@ $(document).on("click", "#savenote", function() {
   $("#bodyinput").val("");
 });
 
-//When you click the scrape new article scrapeBtn
+
 // TODO ================================================
+
+//When you click it will save the article
+$(document).on("click", ".saveArticle", function() {
+  console.log("save clicked!");
+  var thisId = $(this).attr("data-id");
+  $.ajax({
+    method: "UPDATE",
+    url: "/articles/" + thisId,
+  });
+});
+
+//When you click the scrape new article scrapeBtn
 $(document).on("click", "#scrapeBtn", function() {
   // Grab the id associated with the article from the submit button
 });
 
 //When you click it will remove all articles from the DB
-// TODO ================================================
 $(document).on("click", "#removeBtn", function() {
   // Grab the id associated with the article from the submit button
 });
