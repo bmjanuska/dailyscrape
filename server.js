@@ -30,8 +30,8 @@ app.use(express.static("public"));
 mongoose.connect("mongodb://localhost/spoonTamago", { useNewUrlParser: true });
 
 // Routes
+//add home route when making handlebarsssss
 
-//When you click on scrapeBtn
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
   // First, we grab the body of the html with request
@@ -55,10 +55,6 @@ app.get("/scrape", function(req, res) {
       result.date = $(this)
         .children("div.post-meta")
         .children("span.post-date")
-        .text();
-      result.author = $(this)
-        .children("div.post-meta").
-        children("span.post-author")
         .text();
 
       // Create a new Article using the `result` object built from scraping
@@ -95,15 +91,18 @@ app.get("/articles", function(req, res) {
 
 // Route for grabbing a specific Article by id, populate it with it's note
 app.get("/articles/:id", function(req, res) {
+  console.log("I am here!");
   // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
   db.Article.findOne({ _id: req.params.id })
     // ..and populate all of the notes associated with it
     .populate("note")
     .then(function(dbArticle) {
+      console.log("DB Art " + dbArticle);
       // If we were able to successfully find an Article with the given id, send it back to the client
       res.json(dbArticle);
     })
     .catch(function(err) {
+      console.lof(err);
       // If an error occurred, send it to the client
       res.json(err);
     });
@@ -128,6 +127,29 @@ app.post("/articles/:id", function(req, res) {
       res.json(err);
     });
 });
+
+app.get("/notes/:id", function(req, res){
+  db.Note.find({
+    article: req.params.id
+  })
+  .then(function(notes){
+    res.json(notes);
+  })
+  .catch(function(err){
+    res.json(err);
+  });
+});
+
+
+//// TODO:
+//=================================
+//Make a route for saved articles and on there show the option to make a note or remove article from saved
+//note button
+  //move all the note button routes....?
+//remove saved article
+  //Make the saved article a true or false. Saved is true! False will not have item in the bank of saved.
+
+
 
 // Start the server
 app.listen(PORT, function() {

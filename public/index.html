@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <meta charset="UTF-8">
-    <title>Scraping With Mongoose</title>
-  </head>
-  <body>
-    <div id="wrapper">
-      <h1>Tamago Scraper</h1>
-      <button id="scrapeBtn"> Scrape New Articles</button>
-      <button id="removeBtn"> Remove All Articles</button>
-      <div id="articles"></div>
-      <div id="notes"></div>
+<head>
+  <meta charset="UTF-8">
+  <title>Scraping With Mongoose</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container">
+    <div class="jumbotron">
+      <h1 class="display-4">Tamago Scraper</h1>
+      <hr class="my-4">
+      <a class="btn btn-primary btn-lg" id="scrapeBtn" href="/" role="button">Home</a>
+      <a class="btn btn-primary btn-lg" id="removeBtn" href="/saved" role="button">Saved Articles</a>
+      <a class="btn btn-primary btn-lg" id="scrapeBtn" href="/scrape" role="button">Scrape New Articles</a>
+      <a class="btn btn-primary btn-lg" id="removeBtn" href="/remove" role="button">Remove All Articles</a>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="app.js"></script>
-  </body>
+
+    <div id="articles"></div>
+    <div id="notes"></div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="app.js"></script>
+</body>
 </html>

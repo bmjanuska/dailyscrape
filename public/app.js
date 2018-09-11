@@ -1,21 +1,26 @@
 // Grab the articles as a json
 $.getJSON("/articles", function(data) {
   // For each one
+  console.log(data[0]);
   for (var i = 0; i < data.length; i++) {
     // Display the apropos information on the page
-    $("#articles").append("<p>" + data[i].title + "<br />" + data[i].date + " | " + data[i].author + "</p>");
-    //This needs to have a link that takes the user to the article
-    $("#articles").append("<button>" + "Read the Article" + "</button>");
-    $("#articles").append("<button data-id=''>" + "Make A Note" + "</button>");
+    $("#articles").append("<p>" + data[i].title + "<br />" + data[i].date + "</p>");
+    //Need to make a save article button
+    $("#articles").append("<button class='addNote' data-id='" + data[i]._id + "'>" + "Make A Note" + "</button>");
+    //TODO
+    //Create another button to save the article. dataid or something to then get it to show in a saved page
+    //will have to handle in backend to true/ false so it moves
+    // not here... when saved articles then need a route that will get the saved articles db.saved /
   }
 });
 
 
-// Whenever someone clicks a p tag
-$(document).on("click", "button", function() {
-  // Empty the notes from the note section
+// Whenever someone clicks a button tag
+$(document).on("click", ".addNote", function() {
+  console.log("click");
+  // Empty the notes from the note section ????
   $("#notes").empty();
-  // Save the id from the p tag
+  // Save the id from the button tag
   var thisId = $(this).attr("data-id");
 
   // Now make an ajax call for the Article
@@ -36,12 +41,26 @@ $(document).on("click", "button", function() {
       $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
 
       // If there's a note in the article
-      if (data.note) {
-        // Place the title of the note in the title input
-        $("#titleinput").val(data.note.title);
-        // Place the body of the note in the body textarea
-        $("#bodyinput").val(data.note.body);
-      }
+      // if (data.note) {
+      //   // Place the title of the note in the title input
+      //   $("#titleinput").val(data.note.title);
+      //   // Place the body of the note in the body textarea
+      //   $("#bodyinput").val(data.note.body);
+      // }
+      $.get("/notes/" + thisId, function(data) {
+        console.log(data);
+        $(data).each(function(i, element) {
+          var container = $("<div>");
+          var title = $("<p>").text(element.title);
+          var body = $("<p>").text(element.body);
+          //create the delete button
+          //going to have to pass in the notes id to the btn element._id
+
+          container.append(title);
+          container.append(body);
+          $("#notes").append(container);
+        })
+      })
     });
 });
 
@@ -49,7 +68,7 @@ $(document).on("click", "button", function() {
 $(document).on("click", "#savenote", function() {
   // Grab the id associated with the article from the submit button
   var thisId = $(this).attr("data-id");
-
+  console.log("data-id " + thisId);
   // Run a POST request to change the note, using what's entered in the inputs
   $.ajax({
     method: "POST",
@@ -58,7 +77,8 @@ $(document).on("click", "#savenote", function() {
       // Value taken from title input
       title: $("#titleinput").val(),
       // Value taken from note textarea
-      body: $("#bodyinput").val()
+      body: $("#bodyinput").val(),
+      article: thisId
     }
   })
     // With that done
@@ -66,7 +86,7 @@ $(document).on("click", "#savenote", function() {
       // Log the response
       console.log(data);
       // Empty the notes section
-      $("#notes").empty();
+      // $("#notes").empty();
     });
 
   // Also, remove the values entered in the input and textarea for note entry
@@ -82,6 +102,10 @@ $(document).on("click", "#scrapeBtn", function() {
 
 //When you click it will remove all articles from the DB
 // TODO ================================================
-$(document).on("click", "#scrapeBtn", function() {
+$(document).on("click", "#removeBtn", function() {
   // Grab the id associated with the article from the submit button
 });
+
+//This needs to have a link that takes the user to the article
+// $("#articles").append("<button>" + "Read the Article" + "</button>");
+// $("#articles").append("<button data-id=''>" + "Make A Note" + "</button>");
