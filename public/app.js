@@ -1,16 +1,16 @@
 // Grab the articles as a json
 $.getJSON("/articles", function (data) {
   // For each one
+  $(".container").append("<div class='row'></div>");
+
   console.log(data[0]);
   for (let i = 0; i < data.length; i++) {
-    $(".container").append("<div class='row'></div>");
     // Display the apropos information on the page    
-    $(".row").append("<div class='col-8'>" + data[i].title + "<br />" + data[i].date + "</div>");
+    $(".row").append("<div class='col-8'><a href='" + data[i].link + "'>" + data[i].title + "</a>" + "<br />" + data[i].date + "</div>" + "<br />");
     // Make a Note Button
-    $(".row").append("<div class='col-4 btnCol'></div>");
-    $(".btnCol").append("<a class='btn btn-primary addNote' data-id='" + data[i]._id + "'>" + "Make A Note" + "</a>");
+    $(".row").append("<a class='btn btn-primary addNote' data-id='" + data[i]._id + "'>" + "Make A Note" + "</a>");
     //Need to make a save article button
-    $(".btnCol").append("<a class='btn btn-primary saveArticle' data-id='" + data[i]._id + "'>" + "Save Article" + "</a>");
+    $(".row").append("<a class='btn btn-primary saveArticle' data-id='" + data[i]._id + "'>" + "Save Article" + "</a>");
   };
 });
 
@@ -97,6 +97,7 @@ $(document).on("click", "#savenote", function () {
   $("#bodyinput").val("");
 });
 
+// Add button to exit out of creating a note
 
 // TODO ================================================
 
