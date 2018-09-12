@@ -2,13 +2,15 @@
 $.getJSON("/articles", function(data) {
   // For each one
   console.log(data[0]);
-  for (var i = 0; i < data.length; i++) {
-    // Display the apropos information on the page
-    $("#articles").append("<p>" + data[i].title + "<br />" + data[i].date + "</p>");
+  for (let i = 0; i < data.length; i++) {
+    $(".container").append("<div class='row'></div>");
+    // Display the apropos information on the page    
+    $(".row").append("<div class='col-8'>" + data[i].title + "<br />" + data[i].date + "</div>");
+    // Make a Note Button
+    $(".row").append("<div class='col-4 btnCol'></div>");
+    $(".btnCol").append("<a class='btn btn-primary addNote' data-id='" + data[i]._id + "'>" + "Make A Note" + "</a>");
     //Need to make a save article button
-    $("#articles").append("<a class='btn btn-primary addNote' data-id='" + data[i]._id + "'>" + "Make A Note" + "</a>");
-
-    $("#articles").append("<a class='btn btn-primary saveArticle' data-id='" + data[i]._id + "'>" + "Save Article" + "</a>");
+    $(".btnCol").append("<a class='btn btn-primary saveArticle' data-id='" + data[i]._id + "'>" + "Save Article" + "</a>");
     //Create another button to save the article. dataid or something to then get it to show in a saved page
     //will have to handle in backend to true/ false so it moves
     // not here... when saved articles then need a route that will get the saved articles db.saved /
@@ -16,7 +18,7 @@ $.getJSON("/articles", function(data) {
 });
 
 
-// Whenever someone clicks a button tag
+// Whenever someone clicks the add note button 
 $(document).on("click", ".addNote", function() {
   console.log("click");
   // Empty the notes from the note section ????

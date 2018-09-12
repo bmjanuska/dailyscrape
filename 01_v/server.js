@@ -30,7 +30,15 @@ app.use(express.static("public"));
 mongoose.connect("mongodb://localhost/spoonTamago", { useNewUrlParser: true });
 
 // Routes
-//add home route when making handlebarsssss
+// Home route when making handlebarsssss
+app.get("/", function (req,res) {
+  
+});
+
+// Saved route to show saved articles
+app.get("/saved", function (req,res){
+
+}); 
 
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
@@ -68,7 +76,6 @@ app.get("/scrape", function(req, res) {
           return res.json(err);
         });
     });
-
     // If we were able to successfully scrape and save an Article, send a message to the client
     res.send("Scrape Complete");
   });
