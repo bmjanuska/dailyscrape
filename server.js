@@ -26,16 +26,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Use express.static to serve the public folder as a static directory
 app.use(express.static("public"));
 
+// If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+
 // Connect to the Mongo DB
-var databaseUri = mongoose.connect("mongodb://localhost/spoonTamago", { useNewUrlParser: true });
-
-if (process.env.MONGODB_URI) {
-  mongoose.connect(process.env.MONGODB_URI);
-}
-else {
-  mongoose.connect(databaseUrl);
-}
-
+mongoose.connect(MONGODB_URI);
 
 
 // Routes
