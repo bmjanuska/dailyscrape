@@ -35,11 +35,6 @@ app.get("/", function (req,res) {
   res.redirect('/');
 });
 
-// Saved route to show saved articles
-app.get("/saved", function (req,res){
-  res.redirect('/saved');
-}); 
-
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
   // First, we grab the body of the html with request
@@ -81,6 +76,18 @@ app.get("/scrape", function(req, res) {
   });
 });
 
+// Saved route to show saved articles
+app.get("/saved", function (req,res){
+  res.redirect('/saved');
+}); 
+
+// Saved route to show saved articles
+app.get("/remove", function (req,res){
+  db.Article.remove({}, function (err){
+    console.log("No data present")
+  })
+  res.redirect('/');
+}); 
 
 // Route for getting all Articles from the db
 app.get("/articles", function(req, res) {
