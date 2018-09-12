@@ -1,5 +1,5 @@
 // Grab the articles as a json
-$.getJSON("/articles", function(data) {
+$.getJSON("/articles", function (data) {
   // For each one
   console.log(data[0]);
   for (let i = 0; i < data.length; i++) {
@@ -11,15 +11,15 @@ $.getJSON("/articles", function(data) {
     $(".btnCol").append("<a class='btn btn-primary addNote' data-id='" + data[i]._id + "'>" + "Make A Note" + "</a>");
     //Need to make a save article button
     $(".btnCol").append("<a class='btn btn-primary saveArticle' data-id='" + data[i]._id + "'>" + "Save Article" + "</a>");
-    //Create another button to save the article. dataid or something to then get it to show in a saved page
-    //will have to handle in backend to true/ false so it moves
-    // not here... when saved articles then need a route that will get the saved articles db.saved /
-  }
+  };
 });
 
+//Create another button to save the article. dataid or something to then get it to show in a saved page
+//will have to handle in backend to true/ false so it moves
+// not here... when saved articles then need a route that will get the saved articles db.saved /
 
 // Whenever someone clicks the add note button 
-$(document).on("click", ".addNote", function() {
+$(document).on("click", ".addNote", function () {
   console.log("click");
   // Empty the notes from the note section ????
   $("#notes").empty();
@@ -32,7 +32,7 @@ $(document).on("click", ".addNote", function() {
     url: "/articles/" + thisId
   })
     // With that done, add the note information to the page
-    .then(function(data) {
+    .then(function (data) {
       console.log(data);
       // The title of the article
       $("#notes").append("<h2>" + data.title + "</h2>");
@@ -50,9 +50,9 @@ $(document).on("click", ".addNote", function() {
       //   // Place the body of the note in the body textarea
       //   $("#bodyinput").val(data.note.body);
       // }
-      $.get("/notes/" + thisId, function(data) {
+      $.get("/notes/" + thisId, function (data) {
         console.log(data);
-        $(data).each(function(i, element) {
+        $(data).each(function (i, element) {
           var container = $("<div>");
           var title = $("<p>").text(element.title);
           var body = $("<p>").text(element.body);
@@ -68,7 +68,7 @@ $(document).on("click", ".addNote", function() {
 });
 
 // When you click the savenote button
-$(document).on("click", "#savenote", function() {
+$(document).on("click", "#savenote", function () {
   // Grab the id associated with the article from the submit button
   var thisId = $(this).attr("data-id");
   console.log("data-id " + thisId);
@@ -85,7 +85,7 @@ $(document).on("click", "#savenote", function() {
     }
   })
     // With that done
-    .then(function(data) {
+    .then(function (data) {
       // Log the response
       console.log(data);
       // Empty the notes section
@@ -101,7 +101,7 @@ $(document).on("click", "#savenote", function() {
 // TODO ================================================
 
 //When you click it will save the article
-$(document).on("click", ".saveArticle", function() {
+$(document).on("click", ".saveArticle", function () {
   console.log("save clicked!");
   var thisId = $(this).attr("data-id");
   $.ajax({
@@ -111,12 +111,12 @@ $(document).on("click", ".saveArticle", function() {
 });
 
 //When you click the scrape new article scrapeBtn
-$(document).on("click", "#scrapeBtn", function() {
+$(document).on("click", "#scrapeBtn", function () {
   // Grab the id associated with the article from the submit button
 });
 
 //When you click it will remove all articles from the DB
-$(document).on("click", "#removeBtn", function() {
+$(document).on("click", "#removeBtn", function () {
   // Grab the id associated with the article from the submit button
 });
 

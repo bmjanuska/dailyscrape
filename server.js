@@ -27,17 +27,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-mongoose.connect(
-  "mongodb://localhost/spoonTamago",
-  { useNewUrlParser: true }
-);
+mongoose.connect("mongodb://localhost/spoonTamago", { useNewUrlParser: true });
 
 // Routes
 // Home route when making handlebarsssss
-app.get("/", function(req, res) {});
+app.get("/", function (req,res) {
+  res.redirect('/');
+});
 
 // Saved route to show saved articles
-app.get("/saved", function(req, res) {});
+app.get("/saved", function (req,res){
+  res.redirect('/saved');
+}); 
 
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
@@ -76,9 +77,10 @@ app.get("/scrape", function(req, res) {
         });
     });
     // If we were able to successfully scrape and save an Article, send a message to the client
-    res.send("Scrape Complete");
+    res.redirect('/');
   });
 });
+
 
 // Route for getting all Articles from the db
 app.get("/articles", function(req, res) {
@@ -121,11 +123,7 @@ app.post("/articles/:id", function(req, res) {
       // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
       // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
       // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
-      return db.Article.findOneAndUpdate(
-        { _id: req.params.id },
-        { note: dbNote._id },
-        { new: true }
-      );
+      return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
     })
     .then(function(dbArticle) {
       // If we were able to successfully update an Article, send it back to the client
@@ -137,112 +135,65 @@ app.post("/articles/:id", function(req, res) {
     });
 });
 
-app.get("/notes/:id", function(req, res) {
+app.get("/notes/:id", function(req, res){
   db.Note.find({
     article: req.params.id
   })
-    .then(function(notes) {
-      res.json(notes);
-    })
-    .catch(function(err) {
-      res.json(err);
-    });
+  .then(function(notes){
+    res.json(notes);
+  })
+  .catch(function(err){
+    res.json(err);
+  });
 });
+
 
 //// TODO:
 //=================================
 //Make a route for saved articles and on there show the option to make a note or remove article from saved
 //note button
-//move all the note button routes....?
+  //move all the note button routes....?
 //remove saved article
-//Make the saved article a true or false. Saved is true! False will not have item in the bank of saved.
+  //Make the saved article a true or false. Saved is true! False will not have item in the bank of saved.
 
 //update saved data
-app.get("/saved", function(req, res) {
-  db.Article.update(
-    {
-      _id: mongojs.ObjectId(req.params.id)
-    },
-    {
-      // Set the title, note and modified parameters
-      // sent in the req body.
-      $set: {
-        saved: true
+  app.get("/saved", function(req, res){
+    db.Article.update(
+      {
+        _id: mongojs.ObjectId(req.params.id)
+      },
+      {
+        // Set the title, note and modified parameters
+        // sent in the req body.
+        $set: {
+          saved: true
+        }
+      },
+      function(error, edited) {
+        // Log any errors from mongojs
+        if (error) {
+          console.log(error);
+          res.send(error);
+        }
+        else {
+          // Otherwise, send the mongojs response to the browser
+          // This will fire off the success function of the ajax request
+          console.log(edited);
+          res.send(edited);
+        }
       }
-    },
-    function(error, edited) {
-      // Log any errors from mongojs
-      if (error) {
-        console.log(error);
-        res.send(error);
-      } else {
-        // Otherwise, send the mongojs response to the browser
-        // This will fire off the success function of the ajax request
-        console.log(edited);
-        res.send(edited);
-      }
-    }
-  );
-  // db.Article.update({article: req.params.id})
-  // .then(function(dbArticle){
-  //   return db.Article.Update({ _id: req.params.id }, { saved: true });
-  //   res.json(dbArticle);
-  // })
-  // .catch(function(err){
-  //   res.json(err);
-  // });
-});
+    );
+    // db.Article.update({article: req.params.id})
+    // .then(function(dbArticle){
+    //   return db.Article.Update({ _id: req.params.id }, { saved: true });
+    //   res.json(dbArticle);
+    // })
+    // .catch(function(err){
+    //   res.json(err);
+    // });
+  });
 
 // Start the server
 app.listen(PORT, function() {
   console.log("App running on port " + PORT + "!");
 });
-
-// require("dotenv").config();
-// var express = require("express");
-// var bodyParser = require("body-parser");
-// var exphbs = require("express-handlebars");
-
-// var db = require("./models");
-
-// var app = express();
-// var PORT = process.env.PORT || 3000;
-
-// // Middleware
-// app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(bodyParser.json());
-// app.use(express.static("public"));
-
-// // Handlebars
-// app.engine(
-//   "handlebars",
-//   exphbs({
-//     defaultLayout: "main"
-//   })
-// );
-// app.set("view engine", "handlebars");
-
-// // Routes
-// require("./routes/apiRoutes")(app);
-// require("./routes/htmlRoutes")(app);
-
-// var syncOptions = { force: false };
-
-// // If running a test, set syncOptions.force to true
-// // clearing the `testdb`
-// if (process.env.NODE_ENV === "test") {
-//   syncOptions.force = true;
-// }
-
-// // Starting the server, syncing our models ------------------------------------/
-// db.sequelize.sync(syncOptions).then(function() {
-//   app.listen(PORT, function() {
-//     console.log(
-//       "==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.",
-//       PORT,
-//       PORT
-//     );
-//   });
-// });
-
-// module.exports = app;
