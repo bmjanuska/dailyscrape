@@ -27,7 +27,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/spoonTamago", { useNewUrlParser: true });
+var databaseUri = mongoose.connect("mongodb://localhost/spoonTamago", { useNewUrlParser: true });
+
+if (process.env.MONGODB_URI) {
+  mongoose.connect(process.env.MONGODB_URI);
+}
+else {
+  mongoose.connect(databaseUrl);
+}
+
+
 
 // Routes
 // Home route when making handlebarsssss
